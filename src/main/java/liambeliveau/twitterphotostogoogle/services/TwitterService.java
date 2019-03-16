@@ -26,6 +26,7 @@ public class TwitterService {
     /**
      * gets the Twitter object associated with the service
      * if none exists, create it
+     *
      * @return a twitter object
      * @throws TwitterException
      */
@@ -48,6 +49,7 @@ public class TwitterService {
 
     /**
      * gets the URLs of all images posted by the specified twitter account
+     *
      * @param screenName the account handle to get images from
      * @return a list of URLs of images
      * @throws TwitterException
@@ -70,6 +72,7 @@ public class TwitterService {
 
     /**
      * gets all tweets posted by the specified twitter account
+     *
      * @param screenName the account handle to get tweets from
      * @return a list of Status objects
      * @throws TwitterException
