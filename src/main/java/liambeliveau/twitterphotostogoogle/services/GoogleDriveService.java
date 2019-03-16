@@ -5,6 +5,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInsta
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -17,6 +18,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.security.GeneralSecurityException;
@@ -37,19 +39,8 @@ public class GoogleDriveService {
      * @throws IOException if credentials.json can't be found
      */
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        //load client secrets
-        String credentialsJson = System.getenv("googleCredentials");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new StringReader(credentialsJson));
-
-        //request user authorization
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                //.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-                //.setDataStoreFactory(new MemoryDataStoreFactory())
-                .setAccessType("offline")
-                .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        String credentialsJson = System.getenv("googleServiceCredentials");
+        return GoogleCredential.fromStream(new ByteArrayInputStream(credentialsJson.getBytes())).createScoped(SCOPES);
     }
 
     /**
@@ -87,7 +78,7 @@ public class GoogleDriveService {
      * @throws IOException if credentials.json can't be found
      */
     public static void uploadImage(String path, String name) throws GeneralSecurityException, IOException {
-        String folderID = "1dH7StBmw8zbybwzqIllJmC16azbgsmsD";
+        String folderID = System.getenv("driveFolderId");
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)

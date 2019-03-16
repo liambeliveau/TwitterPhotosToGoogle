@@ -15,7 +15,6 @@ import java.util.List;
 
 public class TwitterPhotosToGoogleApplication {
     private static final String IMAGE_FOLDER = "/home/liam/Documents/testDownload/";
-    //private static final String TWITTER_CREDENTIALS_FILE_PATH = "src/main/resources/twitterCredentials.json";
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
         TwitterCredentials twitterCredentials = new TwitterCredentials(
