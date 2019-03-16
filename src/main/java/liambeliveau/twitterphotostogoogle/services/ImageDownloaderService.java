@@ -44,7 +44,5 @@ public class ImageDownloaderService {
             outStream.write(bytes);
             System.out.println("Downloaded file: " + targetFile.getName());
         }
-
-
     }
 }

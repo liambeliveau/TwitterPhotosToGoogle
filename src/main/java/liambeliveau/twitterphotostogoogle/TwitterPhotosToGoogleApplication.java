@@ -1,7 +1,5 @@
 package liambeliveau.twitterphotostogoogle;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import liambeliveau.twitterphotostogoogle.services.GoogleDriveService;
 import liambeliveau.twitterphotostogoogle.services.ImageDownloaderService;
 import liambeliveau.twitterphotostogoogle.services.TwitterService;
@@ -10,7 +8,6 @@ import liambeliveau.twitterphotostogoogle.util.TwitterCredentials;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
@@ -18,16 +15,20 @@ import java.util.List;
 
 public class TwitterPhotosToGoogleApplication {
     private static final String IMAGE_FOLDER = "/home/liam/Documents/testDownload/";
-    private static final String TWITTER_CREDENTIALS_FILE_PATH = "src/main/resources/twitterCredentials.json";
+    //private static final String TWITTER_CREDENTIALS_FILE_PATH = "src/main/resources/twitterCredentials.json";
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        TwitterCredentials twitterCredentials = gson.fromJson(readFile(TWITTER_CREDENTIALS_FILE_PATH,
-                StandardCharsets.US_ASCII), TwitterCredentials.class);
+        TwitterCredentials twitterCredentials = new TwitterCredentials(
+                System.getenv("twitterConsumerKey"),
+                System.getenv("twitterConsumerSecret"),
+                System.getenv("twitterAccessToken"),
+                System.getenv("twitterSecretToken"),
+                System.getenv("twitterScreenName")
+                );
 
-        downloadFromTwitter(twitterCredentials);
-        uploadImagesToGoogle(IMAGE_FOLDER, getFileNames(IMAGE_FOLDER));
+        //downloadFromTwitter(twitterCredentials);
+        //uploadImagesToGoogle(IMAGE_FOLDER, getFileNames(IMAGE_FOLDER));
+        GoogleDriveService.listDriveFiles();
     }
 
     /**
